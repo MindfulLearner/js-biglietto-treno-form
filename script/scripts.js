@@ -1,47 +1,67 @@
-// SCRIPTS SWAGGER java script
+document.getElementById('calcolaBtn').addEventListener('click', function() {
+	let passeggero = { 
+		percorsoKm: "",
+		eta: ""
+	};
 
-let passeggero = { 
-	percorsoKm: "",
-	eta: ""
-};
+	console.log("----------------------------------------------------")
+	console.log("----------------INSERIMENTO DI KM DA PERCORRERE-------------")
+	console.log("----------------------------------------------------")
+	passeggero.percorsoKm = document.getElementById('percorsoKm').value;
+	passeggero.percorsoKm = parseFloat(passeggero.percorsoKm);
+	console.log("inserito:" + passeggero.percorsoKm + " km");
+	console.log("cio che hai inserito e' e un:" + typeof(passeggero.percorsoKm));
 
+	console.log("----------------------------------------------------")
+	console.log("----------------INSERIMENTO DI ETA SWAG-------------")
+	console.log("----------------------------------------------------")
+	passeggero.eta = document.getElementById('eta').value;
+	passeggero.eta = parseFloat(passeggero.eta);
+	console.log("inserito:" + passeggero.eta + " eta");
+	console.log("cio che hai inserito e' e un:" + typeof(passeggero.eta));
 
-// ora stiamo attraverso promp chiedendo a utente di darci dei dati che verranno inseriti in log per debuggare 
+	console.log("----------------------------------------------------")
+	console.log("----------------ORA CALCOLIAMO 0.21 PER km-------------")
+	console.log("----------------------------------------------------")
 
-console.log("----------------------------------------------------")
-console.log("----------------INSERIMENTO DI KM DA PERCORRERE-------------")
-console.log("----------------------------------------------------")
-passeggero.percorsoKm = prompt("Inserisci km che vuoi percorre");
-passeggero.percorsoKm = parseFloat(passeggero.percorsoKm);
-console.log("inserito:" + passeggero.percorsoKm + "km");
-console.log("cio che hai inserito e' e un:" + typeof(passeggero.percorsoKm));
+	const euroPerKm = 0.21;
+	let costoTotalePerKm = passeggero.percorsoKm * euroPerKm;
 
-console.log("----------------------------------------------------")
-console.log("----------------INSERIMENTO DI ETA SWAG-------------")
-console.log("----------------------------------------------------")
-passeggero.eta = prompt("Inserisci eta che vuoi percorre");
-passeggero.eta = parseFloat(passeggero.percorsoKm);
-console.log("inserito:" + passeggero.eta + "eta");
-console.log("cio che hai inserito e' e un:" + typeof(passeggero.eta));
+	console.log(`il costo del percorso normale sara ${passeggero.percorsoKm} x ${euroPerKm}`);
+	console.log(`costo per Km: ${costoTotalePerKm.toFixed(2)} $`);
 
+	console.log("----------------------------------------------------")
+	console.log("-----CONTROLLO ETA per eventuali scontistiche -------")
+	console.log("----------------------------------------------------")
 
-//Ora siamo calcoliamo il prezzo totale del biglietto di viaggio seguendo le rogole
-// - il prezzo base per km e di 0.21
-// - applicato 20% su chi e minorenne
-// - applicato 40% per gli over 65
-// - se e intorno quell'eta tra 65 e  18 allora avranno il prezzo normale 
-console.log("----------------------------------------------------")
-console.log("----------------ORA CALCOLIAMO 0.21 PER km-------------")
-console.log("----------------------------------------------------")
+	let prezzoFinale = costoTotalePerKm;
+	let ticketTitle = "Biglietto";
 
-const prezzoBaseTreno = 0.21;
+	if (passeggero.eta < 18) {
+		console.log(`avendo ${passeggero.eta} anni e minorenne`);
+		let scontoMinorenni = 0.20;
+		let scontoMinorenniDifferenza = costoTotalePerKm * scontoMinorenni;
+		let costoTotaleScontoMinorenni = costoTotalePerKm - scontoMinorenniDifferenza;
+		console.log(`lo sconto applicato su ${costoTotalePerKm} $ sara' di 20% quindi ${costoTotaleScontoMinorenni.toFixed(2)} $`);
+		prezzoFinale = costoTotaleScontoMinorenni;
+		ticketTitle = "Biglietto Minorenni (Sconto 20%)";
+	} else if (passeggero.eta < 65) {
+		console.log(`avendo ${passeggero.eta} anni e un middle aged man`);
+		ticketTitle = "Biglietto Standard";
+	} else { 
+		console.log(`avendo ${passeggero.eta} anni e un vecchietto`);
+		let scontoVecchietti = 0.40;
+		let scontoVecchiettiDifferenza= costoTotalePerKm * scontoVecchietti;
+		let costoTotaleScontoVecchietti = costoTotalePerKm - scontoVecchiettiDifferenza;
+		console.log(`lo sconto applicato su ${costoTotalePerKm} $ sara' di 40% quindi ${costoTotaleScontoVecchietti.toFixed(2)} $`);
+		prezzoFinale = costoTotaleScontoVecchietti;
+		ticketTitle = "Biglietto Over 65 (Sconto 40%)";
+	}
 
-console.log
-
-
-
-
-
-
-
-
+	// Visualizzare i risultati sulla pagina e mostrare il biglietto
+	document.getElementById('outputTitle').innerText = ticketTitle;
+	document.getElementById('outputKm').innerText = `Km da Percorrere: ${passeggero.percorsoKm} km`;
+	document.getElementById('outputEta').innerText = `Età: ${passeggero.eta} anni`;
+	document.getElementById('outputPrezzo').innerText = `Prezzo Finale: ${prezzoFinale.toFixed(2)} €`;
+	document.getElementById('output').style.display = 'block';
+});
